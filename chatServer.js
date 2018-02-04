@@ -42,6 +42,8 @@ io.on('connect', function(socket) {
     console.log('user disconnected');
   });
 });
+
+
 //--------------------------CHAT BOT FUNCTION-------------------------------//
 function bot(data,socket,questionNum) {
   var input = data; // This is generally really terrible from a security point of view ToDo avoid code injection
@@ -56,7 +58,7 @@ function bot(data,socket,questionNum) {
   if (questionNum == 0) {
   answer= 'Hello ' + input + '.  Nice to meet you!';// output response
   waitTime =2000;
-  question = 'Would you like to know your daily calorie limit?';            // load next question
+  question = 'Would you like to know your daily calorie limit?(Yes/No)';            // load next question
   }
   else if (questionNum == 1) {
     if(input.toLowerCase() == 'yes'|| input===1){
@@ -106,7 +108,8 @@ function bot(data,socket,questionNum) {
   }
   else if (questionNum == 4) {
     if(input.toLowerCase()==='breakfast'){
-      meal = "breakfast";
+      var meal = "breakfast";
+      console.log(meal);
       var breakfasts = [
         "Nut butter, banana and chia seed toast",
         "Berry and yogurt smoothie",
@@ -120,7 +123,7 @@ function bot(data,socket,questionNum) {
       question = 'Do you like the meal I suggested you?';            // load next question
     }
     else if(input.toLowerCase()==='lunch'){
-      meal = "lunch";
+      var meal = "lunch";
       var lunchs = [
         "Herbed cheese and tomato sandwich",
         "Spiced chickpea pita",
@@ -135,7 +138,7 @@ function bot(data,socket,questionNum) {
     }
     else if(input.toLowerCase()==='dinner'){
       socket.emit('dinner', input);
-      meal = "dinner";
+      var meal = "dinner";
       var dinners = [
         "Oven-baked salmon",
         "Lemon-garlic shrimp and grits",
@@ -159,15 +162,24 @@ function bot(data,socket,questionNum) {
   else if (questionNum == 5) {
     if(input.toLowerCase()==='yes'|| input===1){
       answer = 'Perfect!';
-      waitTime =2000;
+      waitTime =1000;
       question = '';
     }
     else if(input.toLowerCase()==='no'|| input===0){
-        socket.emit('changeMeal',meal); /// we really should look up the inverse of what we said befor.
-        answer='How about now?'
-        question='';
-        waitTime =0;
-        questionNum--; // Here we go back in the question number this can end up in a loop
+      console.log(gender);
+      
+      var lunchs = [
+        "Herbed cheese and tomato sandwich",
+        "Spiced chickpea pita",
+        "Caesar salmon wrap",
+        "Chicken and rice stir-fry",
+        "Cobb salad"
+      ];
+      var rand = Math.floor(Math.random()*5);
+      answer= 'How about:  ' +lunchs[rand];
+      waitTime =4000;
+      question = '';            // load next question
+      
     }else{
       answer=' I did not understand you. Can you please answer with simply with yes or no.'
       question='';
