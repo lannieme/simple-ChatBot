@@ -30,13 +30,13 @@ io.on('connect', function(socket) {
   var questionNum = 0; // keep count of question, used for IF condition.
   socket.on('loaded', function(){// we wait until the client has loaded and contacted us that it is ready to go.
 
-  socket.emit('answer',"Hey, Hello I am \"___*-\" a simple chat bot example."); //We start with the introduction;
-  setTimeout(timedQuestion, 2500, socket,"What is your Name?"); // Wait a moment and respond with a question.
+  socket.emit('answer',"Hi there, I am \"Fitty\", your personal nutritionist. I can help you to find balanced meals."); //We start with the introduction;
+  setTimeout(timedQuestion, 3500, socket,"Before we start, what do you want me to call you?"); // Wait a moment and respond with a question.
 
 });
   socket.on('message', (data)=>{ // If we get a new message from the client we process it;
         console.log(data);
-        questionNum= bot(data,socket,questionNum);	// run the bot function with the new message
+        questionNum= bot(data,socket,questionNum);  // run the bot function with the new message
       });
   socket.on('disconnect', function() { // This function  gets called when the browser window gets closed
     console.log('user disconnected');
@@ -48,37 +48,122 @@ function bot(data,socket,questionNum) {
   var answer;
   var question;
   var waitTime;
+  var age;
+  var gender;
+  var meal;
 
 /// These are the main statments that make up the conversation.
   if (questionNum == 0) {
-  answer= 'Hello ' + input + ' :-)';// output response
+  answer= 'Hello ' + input + '.  Nice to meet you!';// output response
   waitTime =2000;
-  question = 'How old are you?';			    	// load next question
+  question = 'Would you like to know your daily calorie limit?';            // load next question
   }
   else if (questionNum == 1) {
-  answer= 'Really ' + input + ' Years old? So that means you where born in: ' + (2018-parseInt(input));// output response
-  waitTime =2000;
-  question = 'Where do you live?';			    	// load next question
+    if(input.toLowerCase() == 'yes'|| input===1){
+      answer= 'Cool. To estimate your daily calorie limit I need some more personal details. ';// output response
+      waitTime =2500;
+      question = 'How old are you?';           // load next question
+
+    }
+    else if (input.toLowerCase() == 'no'|| input===0){
+      answer= 'Anyway, let me get to know you more to provide personal recommendations. ';// output response
+      waitTime =2000;
+      question = 'How old are you?';           // load next question
+    }
+  
   }
   else if (questionNum == 2) {
-  answer= ' Cool! I have never been to ' + input+'.';
-  waitTime =2000;
-  question = 'Whats your favorite Color?';			    	// load next question
+    if(Number(input) <20 ){
+      age = Number(input);
+      answer= 'Cool. You are very young. You need balanced nutrients.';// output response
+      waitTime =1000;
+      question = 'Are you a male or female?';           // load next question
+
+    }
+    else {
+      age = Number(input);
+      answer= 'Cool. You are at your golden age.';// output response
+      waitTime =2000;
+      question = 'Are you a male or female?';           // load next question
+    }
+  
   }
+
   else if (questionNum == 3) {
-  answer= 'Ok, ' + input+' it is.';
-  socket.emit('changeBG',input.toLowerCase());
-  waitTime = 2000;
-  question = 'Can you still read the font?';			    	// load next question
+    if(input.toLowerCase()==='male'){
+      gender = 'male';
+      answer= ' As an adult man, you need around 2500kcal a day to maintain your weight.';
+      waitTime =2000;
+      question = 'Ok. What meal are you looking for? Breakfast, Lunch or dinner?';            // load next question
+    }
+    else if(input.toLowerCase()==='female'){
+      gender = 'female';
+      answer= ' As a lady, you need around 2000kcal a day to maintain your weight.';
+      waitTime =2000;
+      question = 'Ok. What meal are you looking for? Breakfast, Lunch or dinner?';            // load next question
+    }
+  
   }
   else if (questionNum == 4) {
+    if(input.toLowerCase()==='breakfast'){
+      meal = "breakfast";
+      var breakfasts = [
+        "Nut butter, banana and chia seed toast",
+        "Berry and yogurt smoothie",
+        "Savory oatmeal with an egg",
+        "Avocado toast with egg"
+      ];
+      var rand = Math.floor(Math.random()*4);
+
+      answer= ' Suggested intake for breakfast is 400Kcal for you. I would recommend you get: ' + breakfasts[rand];
+      waitTime = 4000;
+      question = 'Do you like the meal I suggested you?';            // load next question
+    }
+    else if(input.toLowerCase()==='lunch'){
+      meal = "lunch";
+      var lunchs = [
+        "Herbed cheese and tomato sandwich",
+        "Spiced chickpea pita",
+        "Caesar salmon wrap",
+        "Chicken and rice stir-fry",
+        "Cobb salad"
+      ];
+      var rand = Math.floor(Math.random()*5);
+      answer= 'Suggested intake for lunch is 520Kcal for you. I would recommend you get:  ' +lunchs[rand];
+      waitTime =4000;
+      question = 'Do you like the meal I suggested you?';            // load next question
+    }
+    else if(input.toLowerCase()==='dinner'){
+      socket.emit('dinner', input);
+      meal = "dinner";
+      var dinners = [
+        "Oven-baked salmon",
+        "Lemon-garlic shrimp and grits",
+        "Turkey meatload with sun-dried tomatoes",
+        "Teriyaki hens with bok choy",
+        "Zucchini enchiladas",
+        "slimmed-down chicken pot pie"
+      ];
+      var rand = Math.floor(Math.random()*6);
+      answer= 'Suggested intake for dinner is 500Kcal for you. I would recommend you get:  ' +dinners[rand];;
+      waitTime =4000;
+      question = 'Do you like the meal I suggested you?';            // load next question
+    }
+    else{
+      answer=' I did not understand you. Can you please answer with either breakfast, lunch or dinner?'
+      question='';
+      questionNum--;
+      waitTime =0;
+    }
+  }
+  else if (questionNum == 5) {
     if(input.toLowerCase()==='yes'|| input===1){
       answer = 'Perfect!';
       waitTime =2000;
-      question = 'Whats your favorite place?';
+      question = '';
     }
     else if(input.toLowerCase()==='no'|| input===0){
-        socket.emit('changeFont','white'); /// we really should look up the inverse of what we said befor.
+        socket.emit('changeMeal',meal); /// we really should look up the inverse of what we said befor.
         answer='How about now?'
         question='';
         waitTime =0;
@@ -92,7 +177,7 @@ function bot(data,socket,questionNum) {
   // load next question
   }
   else{
-    answer= 'I have nothing more to say!';// output response
+    answer= 'Hope you enjoyed your meal. Talk to you later!';// output response
     waitTime =0;
     question = '';
   }
