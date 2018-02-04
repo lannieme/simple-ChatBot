@@ -172,6 +172,7 @@ function bot(data,socket,questionNum) {
       answer=' I did not understand you. Can you please answer with simply with yes or no.'
       question='';
       questionNum--;
+      console.log(questionNum);
       waitTime =0;
     }
   // load next question

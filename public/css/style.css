@@ -4,14 +4,14 @@
 }
 
 body {
-	background-color: #f0db4f;
+	background-color: #65C6BB;
 }
 
 h1, p {
-	font-family: sans-serif;
+	font-family: Montserrat,sans-serif;
 	text-align: center;
 	color: #323330;
-	font-size:  100px;
+	font-size:  80px;
 }
 
 
