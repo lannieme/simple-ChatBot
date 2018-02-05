@@ -166,8 +166,6 @@ function bot(data,socket,questionNum) {
       question = '';
     }
     else if(input.toLowerCase()==='no'|| input===0){
-      console.log(gender);
-      
       var lunchs = [
         "Herbed cheese and tomato sandwich",
         "Spiced chickpea pita",
@@ -176,16 +174,15 @@ function bot(data,socket,questionNum) {
         "Cobb salad"
       ];
       var rand = Math.floor(Math.random()*5);
-      answer= 'How about:  ' +lunchs[rand];
-      waitTime =4000;
-      question = '';            // load next question
+      answer= '';
+      waitTime =1000;
+      question = 'How about:  ' +lunchs[rand] +'? Do You like it now?';           // load next question
       
     }else{
-      answer=' I did not understand you. Can you please answer with simply with yes or no.'
-      question='';
+      answer=' ';
+      question='I did not understand you. Can you please answer with simply with yes or no.';
       questionNum--;
-      console.log(questionNum);
-      waitTime =0;
+      waitTime =10;
     }
   // load next question
   }
