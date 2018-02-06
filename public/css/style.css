@@ -5,12 +5,17 @@
 
 body {
 	background-color: #65C6BB;
+    background: url("../bot-bg.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 h1, p {
-	font-family: Montserrat,sans-serif;
+	font-family: 'Abel', sans-serif;
 	text-align: center;
-	color: #323330;
+	color: #3E0606;
 	font-size:  80px;
 }
 
@@ -25,6 +30,15 @@ p {
     margin-top: 100px;
 }
 
+#response {
+    margin-left: 300px;
+    margin-top: 100px;
+    margin-right: 100px;
+}
+
+#container {
+    margin-left: 150px;
+}
 
 input {
     background-color: #eee;

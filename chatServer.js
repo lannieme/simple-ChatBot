@@ -28,6 +28,7 @@ http.listen(serverPort, function() {
 io.on('connect', function(socket) {
   console.log('a new user connected');
   var questionNum = 0; // keep count of question, used for IF condition.
+  // var meal = 'breakfast';
   socket.on('loaded', function(){// we wait until the client has loaded and contacted us that it is ready to go.
 
   socket.emit('answer',"Hi there, I am \"Fitty\", your personal nutritionist. I can help you to find balanced meals."); //We start with the introduction;
@@ -45,51 +46,52 @@ io.on('connect', function(socket) {
 
 
 //--------------------------CHAT BOT FUNCTION-------------------------------//
-function bot(data,socket,questionNum) {
+function bot(data,socket,questionNum,meal) {
   var input = data; // This is generally really terrible from a security point of view ToDo avoid code injection
   var answer;
   var question;
   var waitTime;
   var age;
   var gender;
-  var meal;
 
 /// These are the main statments that make up the conversation.
   if (questionNum == 0) {
-  answer= 'Hello ' + input + '.  Nice to meet you!';// output response
-  waitTime =2000;
-  question = 'Would you like to know your daily calorie limit?(Yes/No)';            // load next question
-  }
+    answer= 'Hello ' + input + '.  Nice to meet you!';// output response
+    waitTime =2000;
+    question = 'Would you like to know your daily calorie limit?(Yes/No)';            // load next question
+  }//end of Q0
   else if (questionNum == 1) {
     if(input.toLowerCase() == 'yes'|| input===1){
       answer= 'Cool. To estimate your daily calorie limit I need some more personal details. ';// output response
       waitTime =2500;
       question = 'How old are you?';           // load next question
-
     }
     else if (input.toLowerCase() == 'no'|| input===0){
       answer= 'Anyway, let me get to know you more to provide personal recommendations. ';// output response
       waitTime =2000;
       question = 'How old are you?';           // load next question
     }
-  
-  }
+  }//end of Q1
   else if (questionNum == 2) {
-    if(Number(input) <20 ){
+    if(Number(input) <22 ){
       age = Number(input);
       answer= 'Cool. You are very young. You need balanced nutrients.';// output response
       waitTime =1000;
       question = 'Are you a male or female?';           // load next question
-
     }
-    else {
+    else if(Number(input) >=22 ){
       age = Number(input);
       answer= 'Cool. You are at your golden age.';// output response
       waitTime =2000;
       question = 'Are you a male or female?';           // load next question
     }
-  
-  }
+    else {
+      answer=' ';
+      question='I did not understand you. Can you please answer with a number?';
+      questionNum--;
+      waitTime = 10;
+    }
+  } //end of Q2
 
   else if (questionNum == 3) {
     if(input.toLowerCase()==='male'){
@@ -104,8 +106,7 @@ function bot(data,socket,questionNum) {
       waitTime =2000;
       question = 'Ok. What meal are you looking for? Breakfast, Lunch or dinner?';            // load next question
     }
-  
-  }
+  }//end of Q3
   else if (questionNum == 4) {
     if(input.toLowerCase()==='breakfast'){
       var meal = "breakfast";
@@ -137,7 +138,6 @@ function bot(data,socket,questionNum) {
       question = 'Do you like the meal I suggested you?';            // load next question
     }
     else if(input.toLowerCase()==='dinner'){
-      socket.emit('dinner', input);
       var meal = "dinner";
       var dinners = [
         "Oven-baked salmon",
@@ -149,35 +149,45 @@ function bot(data,socket,questionNum) {
       ];
       var rand = Math.floor(Math.random()*6);
       answer= 'Suggested intake for dinner is 500Kcal for you. I would recommend you get:  ' +dinners[rand];;
-      waitTime =4000;
+      waitTime =5000;
       question = 'Do you like the meal I suggested you?';            // load next question
     }
     else{
-      answer=' I did not understand you. Can you please answer with either breakfast, lunch or dinner?'
-      question='';
+      answer=' ';
+      question='I did not understand you. Can you please answer with either breakfast, lunch or dinner?';
       questionNum--;
-      waitTime =0;
+      waitTime = 10;
     }
-  }
+  }//end of Q4
   else if (questionNum == 5) {
     if(input.toLowerCase()==='yes'|| input===1){
-      answer = 'Perfect!';
+      answer = 'Perfect! Hope you enjoy your meal. Talk to you later!';
       waitTime =1000;
       question = '';
     }
     else if(input.toLowerCase()==='no'|| input===0){
-      var lunchs = [
+      var meals = [
         "Herbed cheese and tomato sandwich",
         "Spiced chickpea pita",
         "Caesar salmon wrap",
         "Chicken and rice stir-fry",
-        "Cobb salad"
+        "Cobb salad",
+        "Nut butter, banana and chia seed toast",
+        "Berry and yogurt smoothie",
+        "Avocado toast with egg",
+        "Oven-baked salmon",
+        "Lemon-garlic shrimp and grits",
+        "Turkey meatload with sun-dried tomatoes",
+        "Teriyaki hens with bok choy",
+        "Zucchini enchiladas",
+        "slimmed-down chicken pot pie"
+
       ];
-      var rand = Math.floor(Math.random()*5);
+      var rand = Math.floor(Math.random()*14);
       answer= '';
-      waitTime =1000;
-      question = 'How about:  ' +lunchs[rand] +'? Do You like it now?';           // load next question
-      
+      waitTime =50;
+      question = 'How about:  ' +meals[rand] +'? Do You like it now?';           // load next question
+      questionNum--;
     }else{
       answer=' ';
       question='I did not understand you. Can you please answer with simply with yes or no.';
@@ -185,9 +195,9 @@ function bot(data,socket,questionNum) {
       waitTime =10;
     }
   // load next question
-  }
+  }//end of Q5
   else{
-    answer= 'Hope you enjoyed your meal. Talk to you later!';// output response
+    answer= 'Hope you enjoy your meal. Talk to you later!';// output response
     waitTime =0;
     question = '';
   }
