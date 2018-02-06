@@ -32,7 +32,7 @@ io.on('connect', function(socket) {
   socket.on('loaded', function(){// we wait until the client has loaded and contacted us that it is ready to go.
 
   socket.emit('answer',"Hi there, I am \"Fitty\", your personal nutritionist. I can help you to find balanced meals."); //We start with the introduction;
-  setTimeout(timedQuestion, 3500, socket,"Before we start, what do you want me to call you?"); // Wait a moment and respond with a question.
+  setTimeout(timedQuestion, 5500, socket,"Before we start, what do you want me to call you?"); // Wait a moment and respond with a question.
 
 });
   socket.on('message', (data)=>{ // If we get a new message from the client we process it;
@@ -63,12 +63,12 @@ function bot(data,socket,questionNum,meal) {
   else if (questionNum == 1) {
     if(input.toLowerCase() == 'yes'|| input===1){
       answer= 'Cool. To estimate your daily calorie limit I need some more personal details. ';// output response
-      waitTime =2500;
+      waitTime =3500;
       question = 'How old are you?';           // load next question
     }
     else if (input.toLowerCase() == 'no'|| input===0){
       answer= 'Anyway, let me get to know you more to provide personal recommendations. ';// output response
-      waitTime =2000;
+      waitTime =3000;
       question = 'How old are you?';           // load next question
     }
   }//end of Q1
@@ -97,13 +97,13 @@ function bot(data,socket,questionNum,meal) {
     if(input.toLowerCase()==='male'){
       gender = 'male';
       answer= ' As an adult man, you need around 2500kcal a day to maintain your weight.';
-      waitTime =2000;
+      waitTime =4000;
       question = 'Ok. What meal are you looking for? Breakfast, Lunch or dinner?';            // load next question
     }
     else if(input.toLowerCase()==='female'){
       gender = 'female';
       answer= ' As a lady, you need around 2000kcal a day to maintain your weight.';
-      waitTime =2000;
+      waitTime =4000;
       question = 'Ok. What meal are you looking for? Breakfast, Lunch or dinner?';            // load next question
     }
   }//end of Q3
@@ -120,7 +120,7 @@ function bot(data,socket,questionNum,meal) {
       var rand = Math.floor(Math.random()*4);
 
       answer= ' Suggested intake for breakfast is 400Kcal for you. I would recommend you get: ' + breakfasts[rand];
-      waitTime = 4000;
+      waitTime = 7000;
       question = 'Do you like the meal I suggested you?';            // load next question
     }
     else if(input.toLowerCase()==='lunch'){
@@ -134,7 +134,7 @@ function bot(data,socket,questionNum,meal) {
       ];
       var rand = Math.floor(Math.random()*5);
       answer= 'Suggested intake for lunch is 520Kcal for you. I would recommend you get:  ' +lunchs[rand];
-      waitTime =4000;
+      waitTime =7000;
       question = 'Do you like the meal I suggested you?';            // load next question
     }
     else if(input.toLowerCase()==='dinner'){
@@ -149,7 +149,7 @@ function bot(data,socket,questionNum,meal) {
       ];
       var rand = Math.floor(Math.random()*6);
       answer= 'Suggested intake for dinner is 500Kcal for you. I would recommend you get:  ' +dinners[rand];;
-      waitTime =5000;
+      waitTime =7000;
       question = 'Do you like the meal I suggested you?';            // load next question
     }
     else{
